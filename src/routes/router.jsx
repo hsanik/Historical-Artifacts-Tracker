@@ -1,11 +1,14 @@
 import { createBrowserRouter, Outlet} from 'react-router'
 import Signup from '../pages/Signup'
 import Signin from '../pages/Signin'
+import Artifacts from '../pages/Artifacts'
+import MainLayout from '../layouts/MainLayout'
+
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <p>MainLayout</p>,
+        element: <MainLayout />,
         children: [
             {
                 index: true,
@@ -35,7 +38,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: 'add',
-                        element: <p>Artifacts</p>
+                        element: <Artifacts />
                     },
                     {
                         path: ':id',
