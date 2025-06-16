@@ -1,10 +1,45 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
+import { useNavigate, useLocation, Link } from 'react-router'
+import AuthContext from '../context/AuthContext'
 import bgForm from '../assets/bg-form.png'
 import signupImg from '../assets/signup-form.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 
 const Signin = () => {
+  const { signIn, signInWithGoogle, loading } = useContext(AuthContext)
+  const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from?.pathname || '/'
+
+  useEffect(() => {
+    document.title = 'Login'
+  }, [])
+
+  const handleSignin = async (e) => {
+    e.preventDefault()
+    const form = e.target
+    const email = form.email.value
+    const password = form.password.value
+
+    try {
+      await signIn(email, password)
+      navigate(from, { replace: true })
+    } 
+    catch (err) {
+      console.error(err)
+    }
+  }
+
+  const handleGoogleSignin = async () => {
+    try {
+      await signInWithGoogle()
+      navigate(from, { replace: true })
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-base-100 bg-cover bg-no-repeat"
@@ -23,7 +58,7 @@ const Signin = () => {
             Welcome back! Please enter your details.
           </p>
 
-          <form className="space-y-4">
+          <form onSubmit={handleSignin} className="space-y-4">
             <input
               name="email"
               type="email"
@@ -38,18 +73,23 @@ const Signin = () => {
               className="input input-bordered w-full bg-white/60"
               required
             />
-            <button type="submit" className="btn w-full bg-emerald-300 hover:bg-emerald-400 border-none text-white">
-              Sign in
+            <button type="submit" disabled={loading} className="btn w-full bg-emerald-300 hover:bg-emerald-400 border-none text-white">
+              {loading ? 'Signing in...' : 'Sign in'}
             </button>
           </form>
 
           <div className="divider text-xs opacity-60">or sign in with</div>
 
           <div className="flex justify-center">
-            <button className="btn btn-circle btn-ghost shadow">
+            <button onClick={handleGoogleSignin} className="btn btn-circle btn-ghost shadow">
               <FontAwesomeIcon icon={faGoogle} className="text-[#DB4437]" size="lg" />
             </button>
           </div>
+
+          <p className="mt-6 text-center text-gray-600">
+            Don't have an account?{' '}
+            <Link to="/auth/register" className="font-medium text-emerald-500 hover:underline">Sign up</Link>
+          </p>
         </div>
       </div>
     </div>
