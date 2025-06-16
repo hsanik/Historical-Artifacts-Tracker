@@ -1,10 +1,57 @@
-import React from 'react'
+import React, { useState, useContext, useEffect } from 'react'
+import { useNavigate, Link, useLocation } from 'react-router'
+import AuthContext from '../context/AuthContext'
 import bgForm from '../assets/bg-form.png'
 import signupImg from '../assets/signup-form.png'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGoogle, faFacebookF } from '@fortawesome/free-brands-svg-icons'
 
 const Signup = () => {
+  const { signUp, loading } = useContext(AuthContext)
+  const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from?.pathname || '/'
+
+  useEffect(() => {
+    document.title = 'Register'
+  }, [])
+
+  const validatePassword = (password) => {
+    if (password.length < 6) {
+      console.log('Password must be at least 6 characters long')
+      return false
+    }
+    if (!/[A-Z]/.test(password)) {
+      console.log('Password must contain at least one uppercase letter')
+      return false
+    }
+    if (!/[a-z]/.test(password)) {
+      console.log('Password must contain at least one lowercase letter')
+      return false
+    }
+    return true
+  }
+
+  const handleSignup = async (e) => {
+    e.preventDefault()
+    const form = e.target
+    const displayName = form.name.value
+    const photoURL = form.photoURL.value
+    const email = form.email.value
+    const password = form.password.value
+
+    if (!validatePassword(password)) {
+      return
+    }
+
+    try {
+      await signUp(email, password, displayName, photoURL)
+      navigate(from, { replace: true })
+    } catch (err) {
+      console.error(err)
+      console.log(err.message)
+    }
+  }
+
+
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-base-100 bg-cover bg-no-repeat"
@@ -20,10 +67,10 @@ const Signup = () => {
         <div className="relative z-10 md:ml-auto md:w-1/2 p-8 md:p-12 bg-white/70 backdrop-blur-lg">
           <h2 className="text-4xl md:text-5xl font-extrabold text-emerald-400">Signup</h2>
           <p className="text-sm md:text-base text-gray-700 mt-2 mb-6">
-          Create a new account to get started with Artifact.
+            Create a new account to get started with Artifact.
           </p>
 
-          <form className="space-y-4">
+          <form onSubmit={handleSignup} className="space-y-4">
             <input
               name="name"
               type="text"
@@ -34,7 +81,7 @@ const Signup = () => {
             <input
               name="photoURL"
               type="url"
-              placeholder="photoURL"
+              placeholder="photo URL"
               className="input input-bordered w-full bg-white/60"
               required
             />
@@ -52,21 +99,16 @@ const Signup = () => {
               className="input input-bordered w-full bg-white/60"
               required
             />
-            <button type="submit" className="btn w-full bg-emerald-300 hover:bg-emerald-400 border-none text-white">
-              Create account
+
+            <button type="submit" disabled={loading} className="btn w-full bg-emerald-300 hover:bg-emerald-400 border-none text-white">
+              {loading ? 'Creating...' : 'Create account'}
             </button>
           </form>
 
-          <div className="divider text-xs opacity-60">or sign up with</div>
-
-          <div className="flex justify-center gap-4">
-            <button className="btn btn-circle btn-ghost shadow">
-              <FontAwesomeIcon icon={faGoogle} className="text-[#DB4437]" size="lg" />
-            </button>
-            <button className="btn btn-circle btn-ghost shadow text-[#1877F2]">
-              <FontAwesomeIcon icon={faFacebookF} size="lg" />
-            </button>
-          </div>
+          <p className="mt-6 text-center text-gray-600">
+            Already have an account?{' '}
+            <Link to="/auth/login" className="font-medium text-emerald-500 hover:underline">Sign in</Link>
+          </p>
         </div>
       </div>
     </div>
