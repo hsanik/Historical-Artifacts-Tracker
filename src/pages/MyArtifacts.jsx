@@ -49,7 +49,7 @@ const MyArtifacts = () => {
     if (error) return <p className="text-center text-red-500 mt-10">{error}</p>
 
     if (artifacts.length === 0) {
-        return <p className="text-center mt-10 text-gray-600">You haven\'t added any artifacts yet.</p>
+        return <p className="text-center mt-10 text-gray-600">You haven't added any artifacts yet.</p>
     }
 
     return (

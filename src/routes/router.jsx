@@ -9,6 +9,7 @@ import PrivateRoute from './PrivateRoute'
 import MyArtifacts from '../pages/MyArtifacts'
 import UpdateArtifact from '../pages/UpdateArtifact'
 import LikedArtifacts from '../pages/LikedArtifacts'
+import Home from '../pages/Home'
 
 
 const router = createBrowserRouter([
@@ -18,7 +19,7 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <p>Home</p>
+                element: <Home />
             },
             {
                 path: "auth",

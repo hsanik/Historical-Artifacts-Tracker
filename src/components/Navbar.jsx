@@ -42,9 +42,9 @@ const Navbar = () => {
             </label>
             <ul tabIndex={0} className="mt-3 dropdown-content bg-white text-gray-800 rounded w-52 shadow-lg border border-gray-200">
               <li className="font-semibold text-center pointer-events-none py-2 border-b border-gray-200">{user.displayName || 'Unnamed User'}</li>
-              <li><NavLink to="/my">My Artifacts</NavLink></li>
-              <li><NavLink to="/liked">Liked Artifacts</NavLink></li>
-              <li><button onClick={handleLogout}>Logout</button></li>
+              <li><NavLink to="/my" className="pl-4">My Artifacts</NavLink></li>
+              <li><NavLink to="/liked" className="pl-4">Liked Artifacts</NavLink></li>
+              <li><button onClick={handleLogout} className="pl-4 pb-2 cursor-pointer">Logout</button></li>
             </ul>
           </div>
         ) : (

@@ -1,12 +1,12 @@
 import './App.css'
-import Signin from './pages/Signin'
+import Artifacts from './pages/Artifacts'
 
 function App() {
 
   return (
     <>
       {/* <Signup /> */}
-      <Signin />
+      {/* <Artifacts /> */}
     </>
   )
 }
