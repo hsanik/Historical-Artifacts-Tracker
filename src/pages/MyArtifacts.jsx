@@ -16,10 +16,10 @@ const MyArtifacts = () => {
                 // TODO: use real API from backend
                 const data = []
                 setArtifacts(data)
-            } 
+            }
             catch (err) {
                 setError('Failed to fetch your artifacts')
-            } 
+            }
             finally {
                 setLoading(false)
             }
@@ -32,7 +32,7 @@ const MyArtifacts = () => {
         try {
             // TODO: use real API from backend
             setArtifacts(prev => prev.filter(a => a._id !== id))
-        } 
+        }
         catch (err) {
             console.error(err)
         }
