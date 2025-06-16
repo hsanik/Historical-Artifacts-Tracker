@@ -7,6 +7,7 @@ import ArtifactDetails from '../pages/ArtifactDetails'
 import MainLayout from '../layouts/MainLayout'
 import PrivateRoute from './PrivateRoute'
 import MyArtifacts from '../pages/MyArtifacts'
+import UpdateArtifact from '../pages/UpdateArtifact'
 
 
 const router = createBrowserRouter([
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: ':id/edit',
-                        element: <p>UpdateArtifact</p>
+                        element: <PrivateRoute><UpdateArtifact /></PrivateRoute>
                     }
                 ]
             },
