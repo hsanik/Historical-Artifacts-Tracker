@@ -8,6 +8,7 @@ import MainLayout from '../layouts/MainLayout'
 import PrivateRoute from './PrivateRoute'
 import MyArtifacts from '../pages/MyArtifacts'
 import UpdateArtifact from '../pages/UpdateArtifact'
+import LikedArtifacts from '../pages/LikedArtifacts'
 
 
 const router = createBrowserRouter([
@@ -57,7 +58,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'liked',
-                element: <p>LikedArtifacts</p>
+                element: <PrivateRoute><LikedArtifacts /></PrivateRoute>
             },
             {
                 path: 'my',
