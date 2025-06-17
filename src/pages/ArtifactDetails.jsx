@@ -18,7 +18,7 @@ const ArtifactDetails = () => {
     useEffect(() => {
         const fetchDetails = async () => {
             const data = await getArtifactById(id)
-            setArtifact(data)
+                setArtifact(data)
             if(user){
                const likes = await getLikedArtifacts(user.email)
                setLiked(likes.some(a=>a._id===id))

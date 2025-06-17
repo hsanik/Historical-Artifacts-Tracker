@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://artifacts-server-side-ldmznqrlw-4niks-projects.vercel.app';
 
 const handleResponse = async (res) => {
   if (!res.ok) {
