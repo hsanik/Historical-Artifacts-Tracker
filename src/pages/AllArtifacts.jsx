@@ -13,13 +13,12 @@ const AllArtifacts = () => {
   const [query, setQuery] = useState(initialQ)
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true)
-      const data = await getAllArtifacts(query)
+    const fetchData = async (term) => {
+      const data = await getAllArtifacts(term)
       setArtifacts(data)
       setLoading(false)
     }
-    fetchData()
+    fetchData(query)
   }, [query])
 
   const handleSubmit = (e)=>{
