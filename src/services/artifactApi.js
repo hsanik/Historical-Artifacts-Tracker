@@ -10,8 +10,9 @@ const handleResponse = async (res) => {
   return res.json();
 };
 
-export const getAllArtifacts = async () => {
-  const res = await fetch(`${BASE_URL}/artifacts`);
+export const getAllArtifacts = async (search='') => {
+  const qs = search ? `?search=${encodeURIComponent(search)}` : '';
+  const res = await fetch(`${BASE_URL}/artifacts${qs}`);
   return handleResponse(res);
 };
 

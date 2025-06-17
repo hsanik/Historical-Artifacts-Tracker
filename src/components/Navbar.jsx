@@ -1,11 +1,15 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router'
 import AuthContext from '../context/AuthContext'
 import logoImg from '../assets/logo.png'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext)
   const navigate = useNavigate()
+  const [showSearch, setShowSearch] = useState(false)
+  const [term, setTerm] = useState('')
 
   const handleLogout = async () => {
     try {
@@ -33,6 +37,17 @@ const Navbar = () => {
       </div>
 
       <div className="md:flex items-center gap-3">
+        {/* search icon */}
+        <div className="relative mr-2">
+          <button onClick={()=>setShowSearch(prev=>!prev)} className="btn btn-ghost btn-square">
+            <FontAwesomeIcon icon={faSearch} />
+          </button>
+          {showSearch && (
+            <form onSubmit={(e)=>{e.preventDefault(); if(term.trim()){navigate(`/artifacts?search=${encodeURIComponent(term.trim())}`); setShowSearch(false); setTerm('');}}} className="absolute right-0 mt-2 z-50">
+              <input value={term} onChange={e=>setTerm(e.target.value)} type="text" placeholder="Search..." className="input input-bordered w-48" autoFocus />
+            </form>
+          )}
+        </div>
         {user ? (
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-square avatar">
