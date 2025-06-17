@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import AuthContext from '../context/AuthContext'
+import { getLikedArtifacts } from '../services/artifactApi.js'
 
 const LikedArtifacts = () => {
     const { user, loading: authLoading } = useContext(AuthContext)
@@ -13,8 +14,7 @@ const LikedArtifacts = () => {
 
         const fetchLikes = async () => {
             try {
-                // TODO: use real API from backend
-                const data = []
+                const data = await getLikedArtifacts(user.email)
                 setLikes(data)
             } catch (err) {
                 setError('Failed to fetch liked artifacts')
@@ -25,6 +25,10 @@ const LikedArtifacts = () => {
 
         fetchLikes()
     }, [user])
+
+    useEffect(() => {
+        document.title = 'Liked Artifacts'
+    }, [])
 
     if (authLoading || loading) {
         return (

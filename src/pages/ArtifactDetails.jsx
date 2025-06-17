@@ -2,10 +2,11 @@ import React, { useEffect, useState, useContext } from 'react'
 import { useParams } from 'react-router'
 import AuthContext from '../context/AuthContext'
 import { getArtifactById, likeArtifact } from '../services/artifactApi.js'
+import { toast } from 'react-toastify'
 
 const ArtifactDetails = () => {
     const { id } = useParams()
-    const { loading: authLoading } = useContext(AuthContext)
+    const { loading: authLoading, user } = useContext(AuthContext)
 
     const [artifact, setArtifact] = useState(null)
     const [likeUpdating, setLikeUpdating] = useState(false)
@@ -25,12 +26,11 @@ const ArtifactDetails = () => {
         setArtifact({ ...artifact, likeCount: prev + 1 })
 
         try {
-            await likeArtifact(id)
-        } 
-        catch {
+            await likeArtifact(id, user?.email)
+        } catch {
+            toast.error('You already liked this artifact')
             setArtifact({ ...artifact, likeCount: prev })
-        } 
-        finally {
+        } finally {
             setLikeUpdating(false)
         }
     }

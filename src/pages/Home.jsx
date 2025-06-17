@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router'
+import { getTopArtifacts } from '../services/artifactApi.js'
 import bg1 from '../assets/slide1.png'
 import bg2 from '../assets/slide2.png'
 import bg3 from '../assets/slide3.png'
@@ -38,9 +39,11 @@ const Home = () => {
     const [current, setCurrent] = useState(0)
 
     useEffect(() => {
-        // TODO: fetch featured (top 6 by likes)
-        const data = []
-        setFeatured(data)
+        const fetchTop = async () => {
+            const data = await getTopArtifacts()
+            setFeatured(data)
+        }
+        fetchTop()
     }, [])
 
     useEffect(() => {

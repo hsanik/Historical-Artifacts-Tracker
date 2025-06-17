@@ -65,12 +65,26 @@ export const deleteArtifact = async (id) => {
   }
 };
 
-export const likeArtifact = async (id) => {
-  const res = await fetch(`${BASE_URL}/artifacts/${id}/like`, { method: 'POST' });
+export const likeArtifact = async (id, userEmail) => {
+  const res = await fetch(`${BASE_URL}/artifacts/${id}/like`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userEmail }),
+  });
   return handleResponse(res);
 };
 
 export const getMyArtifacts = async (email) => {
   const res = await fetch(`${BASE_URL}/artifacts/mine/${email}`);
+  return handleResponse(res);
+};
+
+export const getLikedArtifacts = async (email) => {
+  const res = await fetch(`${BASE_URL}/likes/${email}`);
+  return handleResponse(res);
+};
+
+export const getTopArtifacts = async () => {
+  const res = await fetch(`${BASE_URL}/artifacts/top`);
   return handleResponse(res);
 }; 

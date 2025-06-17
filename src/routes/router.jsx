@@ -10,6 +10,7 @@ import MyArtifacts from '../pages/MyArtifacts'
 import UpdateArtifact from '../pages/UpdateArtifact'
 import LikedArtifacts from '../pages/LikedArtifacts'
 import Home from '../pages/Home'
+import NotFound from '../pages/NotFound'
 
 
 const router = createBrowserRouter([
@@ -45,7 +46,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: 'add',
-                        element: <Artifacts />
+                        element: <PrivateRoute><Artifacts /></PrivateRoute>
                     },
                     {
                         path: ':id',
@@ -70,7 +71,7 @@ const router = createBrowserRouter([
     },
     {
         path: "*",
-        element: <p>ErrorLayout</p>
+        element: <NotFound />
     }
 ])
 
