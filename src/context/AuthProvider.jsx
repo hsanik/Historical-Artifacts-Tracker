@@ -11,6 +11,7 @@ import {
     signOut,
     sendPasswordResetEmail
 } from "firebase/auth";
+import { toast } from 'react-toastify';
 
 
 const AuthProvider = ({ children }) => {
@@ -25,10 +26,12 @@ const AuthProvider = ({ children }) => {
             updateProfile(auth.currentUser, { displayName, photoURL});
             setUser(auth.currentUser);
             setLoading(false);
+            toast.success('Account created successfully');
             return result
         }
         catch (error) {
             setLoading(false);
+            toast.error(error.message);
             throw error;
         }
     }
@@ -38,10 +41,12 @@ const AuthProvider = ({ children }) => {
         try {
             const result = await signInWithEmailAndPassword(auth, email, password);
             setLoading(false);
+            toast.success('Logged in successfully');
             return result;
         }
         catch (error) {
             setLoading(false);
+            toast.error(error.message);
             throw error;
         }
     }
@@ -50,10 +55,12 @@ const AuthProvider = ({ children }) => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
             setLoading(false);
+            toast.success('Logged in with Google successfully');
             return result;
         }
         catch (error) {
             setLoading(false);
+            toast.error(error.message);
             throw error;
         }
     }
@@ -62,10 +69,12 @@ const AuthProvider = ({ children }) => {
         try {
             const result = await signOut(auth);
             setLoading(false);
+            toast.success('Logged out successfully');
             return result;
         }
         catch (error) {
             setLoading(false);
+            toast.error(error.message);
             throw error;
         }
     }
@@ -74,10 +83,12 @@ const AuthProvider = ({ children }) => {
         try {
             const result = await updateProfile(auth.currentUser, { displayName, photoURL});
             setLoading(false);
+            toast.success('Profile updated successfully');
             return result;
         }
         catch (error) {
             setLoading(false);
+            toast.error(error.message);
             throw error;
         }
     }
@@ -87,10 +98,12 @@ const AuthProvider = ({ children }) => {
         try {
             const result = await sendPasswordResetEmail(auth, email);
             setLoading(false);
+            toast.success('Password reset email sent');
             return result;
         }
         catch (error) {
             setLoading(false);
+            toast.error(error.message);
             throw error;
         }
     }
