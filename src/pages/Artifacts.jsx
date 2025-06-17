@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
 import bgForm from '../assets/add-artifact-bg.png'
 import AuthContext from '../context/AuthContext'
+import { addArtifact } from '../services/artifactApi.js'
 
 const Artifacts = () => {
   const { user } = useContext(AuthContext)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const form = e.target
     const artifact = {
@@ -21,8 +22,8 @@ const Artifacts = () => {
       adderName: user?.displayName || 'Anonymous',
       adderEmail: user?.email || 'N/A',
     }
-    console.log('Submit artifact', artifact)
-    // TODO: send to backend / firestore
+    await addArtifact(artifact)
+    form.reset()
   }
 
   return (

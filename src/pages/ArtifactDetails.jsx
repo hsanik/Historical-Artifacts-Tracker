@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useParams } from 'react-router'
 import AuthContext from '../context/AuthContext'
+import { getArtifactById, likeArtifact } from '../services/artifactApi.js'
 
 const ArtifactDetails = () => {
     const { id } = useParams()
@@ -11,25 +12,8 @@ const ArtifactDetails = () => {
 
     useEffect(() => {
         const fetchDetails = async () => {
-            try {
-                // TODO: use real API from backend
-                const data = {
-                    _id: id,
-                    artifactName: 'Placeholder Artifact',
-                    imageUrl: 'https://i.ibb.co/SD6y0QVj/drawing.png',
-                    artifactType: 'Tools',
-                    historicalContext: '',
-                    shortDescription: 'Short desc',
-                    createdAt: '100 BC',
-                    discoveredAt: '1799',
-                    discoveredBy: 'Sajid Hassan',
-                    presentLocation: 'Bangladesh National Museum',
-                    likeCount: 0,
-                }
-                setArtifact(data)
-            } catch (err) {
-                console.error(err)
-            }
+            const data = await getArtifactById(id)
+            setArtifact(data)
         }
         fetchDetails()
     }, [id])
@@ -41,12 +25,12 @@ const ArtifactDetails = () => {
         setArtifact({ ...artifact, likeCount: prev + 1 })
 
         try {
-            // TODO: use real API from backend
-        }
-        catch (err) {
-            console.error(err)
+            await likeArtifact(id)
+        } 
+        catch {
             setArtifact({ ...artifact, likeCount: prev })
-        } finally {
+        } 
+        finally {
             setLikeUpdating(false)
         }
     }

@@ -3,6 +3,7 @@ import { useNavigate, Link, useLocation } from 'react-router'
 import AuthContext from '../context/AuthContext'
 import bgForm from '../assets/bg-form.png'
 import signupImg from '../assets/signup-form.png'
+import { toast } from 'react-toastify'
 
 const Signup = () => {
   const { signUp, loading } = useContext(AuthContext)
@@ -16,15 +17,15 @@ const Signup = () => {
 
   const validatePassword = (password) => {
     if (password.length < 6) {
-      console.log('Password must be at least 6 characters long')
+      toast.error('Password must be at least 6 characters long')
       return false
     }
     if (!/[A-Z]/.test(password)) {
-      console.log('Password must contain at least one uppercase letter')
+      toast.error('Password must contain at least one uppercase letter')
       return false
     }
     if (!/[a-z]/.test(password)) {
-      console.log('Password must contain at least one lowercase letter')
+      toast.error('Password must contain at least one lowercase letter')
       return false
     }
     return true
@@ -42,13 +43,8 @@ const Signup = () => {
       return
     }
 
-    try {
-      await signUp(email, password, displayName, photoURL)
-      navigate(from, { replace: true })
-    } catch (err) {
-      console.error(err)
-      console.log(err.message)
-    }
+    await signUp(email, password, displayName, photoURL)
+    navigate(from, { replace: true })
   }
 
 

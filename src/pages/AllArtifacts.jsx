@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router'
+import { getAllArtifacts } from '../services/artifactApi.js'
 
 const AllArtifacts = () => {
   const [artifacts, setArtifacts] = useState([])
@@ -8,14 +9,9 @@ const AllArtifacts = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // TODO: use real API from backend
-        const data = []
+        const data = await getAllArtifacts()
         setArtifacts(data)
-      } 
-      catch (err) {
-        console.error(err)
-      } 
-      finally {
+      } finally {
         setLoading(false)
       }
     }

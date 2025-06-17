@@ -22,22 +22,13 @@ const Signin = () => {
     const email = form.email.value
     const password = form.password.value
 
-    try {
-      await signIn(email, password)
-      navigate(from, { replace: true })
-    } 
-    catch (err) {
-      console.error(err)
-    }
+    await signIn(email, password)
+    navigate(from, { replace: true })
   }
 
   const handleGoogleSignin = async () => {
-    try {
-      await signInWithGoogle()
-      navigate(from, { replace: true })
-    } catch (err) {
-      console.error(err)
-    }
+    await signInWithGoogle()
+    navigate(from, { replace: true })
   }
 
   return (

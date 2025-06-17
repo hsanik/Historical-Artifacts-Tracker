@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import AuthContext from '../context/AuthContext'
+import { getMyArtifacts, deleteArtifact } from '../services/artifactApi.js'
 
 const MyArtifacts = () => {
     const { user, loading: authLoading } = useContext(AuthContext)
@@ -13,8 +14,7 @@ const MyArtifacts = () => {
 
         const fetchMine = async () => {
             try {
-                // TODO: use real API from backend
-                const data = []
+                const data = await getMyArtifacts(user.email)
                 setArtifacts(data)
             }
             catch (err) {
@@ -29,13 +29,8 @@ const MyArtifacts = () => {
 
     const handleDelete = async (id) => {
         if (!confirm('Are you sure you want to delete this artifact?')) return
-        try {
-            // TODO: use real API from backend
-            setArtifacts(prev => prev.filter(a => a._id !== id))
-        }
-        catch (err) {
-            console.error(err)
-        }
+        await deleteArtifact(id)
+        setArtifacts(prev => prev.filter(a => a._id !== id))
     }
 
     if (authLoading || loading) {

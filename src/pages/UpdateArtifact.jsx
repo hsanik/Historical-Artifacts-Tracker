@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router'
+import { getArtifactById, updateArtifact } from '../services/artifactApi.js'
 
 const UpdateArtifact = () => {
     const { id } = useParams()
@@ -9,22 +10,8 @@ const UpdateArtifact = () => {
 
     useEffect(() => {
         const fetchOne = async () => {
-            try {
-                // TODO: use real API from backend
-                const data = {
-                    artifactName: 'Placeholder',
-                    imageUrl: '',
-                    artifactType: 'Tools',
-                    historicalContext: '',
-                    createdAt: '',
-                    discoveredAt: '',
-                    discoveredBy: '',
-                    presentLocation: '',
-                }
-                setArtifact(data)
-            } catch (err) {
-                console.error(err)
-            }
+            const data = await getArtifactById(id)
+            setArtifact(data)
         }
         fetchOne()
     }, [id])
@@ -44,10 +31,8 @@ const UpdateArtifact = () => {
                 discoveredBy: formEl.discoveredBy.value,
                 presentLocation: formEl.presentLocation.value,
             }
-            // TODO: use real API from backend
+            await updateArtifact(id, updated)
             navigate('/my')
-        } catch (err) {
-            console.error(err)
         } finally {
             setSaving(false)
         }
