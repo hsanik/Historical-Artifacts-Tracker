@@ -1,8 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useParams } from 'react-router'
 import AuthContext from '../context/AuthContext'
-import { getArtifactById, likeArtifact } from '../services/artifactApi.js'
+import { getArtifactById, likeArtifact, getLikedArtifacts } from '../services/artifactApi.js'
 import { toast } from 'react-toastify'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons'
+import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons'
 
 const ArtifactDetails = () => {
     const { id } = useParams()
@@ -10,11 +13,16 @@ const ArtifactDetails = () => {
 
     const [artifact, setArtifact] = useState(null)
     const [likeUpdating, setLikeUpdating] = useState(false)
+    const [liked, setLiked] = useState(false)
 
     useEffect(() => {
         const fetchDetails = async () => {
             const data = await getArtifactById(id)
             setArtifact(data)
+            if(user){
+               const likes = await getLikedArtifacts(user.email)
+               setLiked(likes.some(a=>a._id===id))
+            }
         }
         fetchDetails()
     }, [id])
@@ -23,13 +31,19 @@ const ArtifactDetails = () => {
         if (!artifact || likeUpdating) return
         setLikeUpdating(true)
         const prev = artifact.likeCount
-        setArtifact({ ...artifact, likeCount: prev + 1 })
+        const newLiked = !liked
+        const newCount = newLiked ? prev + 1 : prev - 1
+        setArtifact({ ...artifact, likeCount: newCount })
+        setLiked(newLiked)
 
         try {
-            await likeArtifact(id, user?.email)
+            const res = await likeArtifact(id, user?.email)
+            setLiked(res.liked)
+            setArtifact(a=>({...a, likeCount: res.likeCount}))
         } catch {
             toast.error('You already liked this artifact')
             setArtifact({ ...artifact, likeCount: prev })
+            setLiked(liked)
         } finally {
             setLikeUpdating(false)
         }
@@ -60,12 +74,14 @@ const ArtifactDetails = () => {
                     <div className="flex items-center gap-3 mt-6">
                         <button
                             onClick={handleLike}
-                            className="btn btn-sm bg-emerald-400 hover:bg-emerald-500 text-white"
+                            className="btn btn-sm"
                             disabled={likeUpdating}
                         >
-                            {likeUpdating ? 'Liking...' : 'Like'}
+                            {likeUpdating ? '...' : (
+                                <FontAwesomeIcon icon={ liked ? solidHeart : regularHeart } className={ liked ? 'text-red-500' : 'text-gray-400' } size="lg" />
+                            )}
                         </button>
-                        <span>{artifact.likeCount} Likes</span>
+                        <span>{artifact.likeCount} {artifact.likeCount===1?'Like':'Likes'}</span>
                     </div>
                 </div>
             </div>
