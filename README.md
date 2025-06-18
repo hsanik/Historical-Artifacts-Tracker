@@ -18,7 +18,7 @@ React (Vite) front-end for browsing, adding, liking and managing museum artifact
 * Tailwind CSS, DaisyUI
 * Firebase Authentication
 * Toast notifications via **react-toastify**
-* Calls REST API served by the [Artifact Vault server](../artifacts-server-side)
+* Calls REST API served by the [Artifact Vault server](https://github.com/Programming-Hero-Web-Course4/b11a11-server-side-4nik/tree/main)
 
 ## Prerequisites
 
