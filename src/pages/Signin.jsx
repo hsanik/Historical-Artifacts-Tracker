@@ -5,6 +5,7 @@ import bgForm from '../assets/bg-form.png'
 import signupImg from '../assets/signup-form.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
+import useTitle from '../hooks/useTitle.jsx'
 
 const Signin = () => {
   const { signIn, signInWithGoogle, loading } = useContext(AuthContext)
@@ -12,9 +13,7 @@ const Signin = () => {
   const location = useLocation()
   const from = location.state?.from?.pathname || '/'
 
-  useEffect(() => {
-    document.title = 'Login'
-  }, [])
+  useTitle('Sign In')
 
   const handleSignin = async (e) => {
     e.preventDefault()

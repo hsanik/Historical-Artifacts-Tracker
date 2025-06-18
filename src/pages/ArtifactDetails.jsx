@@ -6,6 +6,7 @@ import { toast } from 'react-toastify'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons'
+import useTitle from '../hooks/useTitle.jsx'
 
 const ArtifactDetails = () => {
     const { id } = useParams()
@@ -26,6 +27,8 @@ const ArtifactDetails = () => {
         }
         fetchDetails()
     }, [id])
+
+    useTitle(artifact?artifact.artifactName:'Artifact Details')
 
     const handleLike = async () => {
         if (!artifact || likeUpdating) return

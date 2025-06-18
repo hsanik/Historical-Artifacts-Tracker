@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router'
 import { getAllArtifacts } from '../services/artifactApi.js'
+import useTitle from '../hooks/useTitle.jsx'
 
 const AllArtifacts = () => {
   const location = useLocation()
@@ -30,6 +31,8 @@ const AllArtifacts = () => {
       navigate('/artifacts')
     }
   }
+
+  useTitle('All Artifacts')
 
   if (loading) {
     return (

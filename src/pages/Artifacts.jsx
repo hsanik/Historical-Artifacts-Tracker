@@ -2,9 +2,11 @@ import React, { useContext } from 'react'
 import bgForm from '../assets/add-artifact-bg.png'
 import AuthContext from '../context/AuthContext'
 import { addArtifact } from '../services/artifactApi.js'
+import useTitle from '../hooks/useTitle.jsx'
 
 const Artifacts = () => {
   const { user } = useContext(AuthContext)
+  useTitle('Add Artifact')
 
   const handleSubmit = async (e) => {
     e.preventDefault()

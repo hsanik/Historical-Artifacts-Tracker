@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import AuthContext from '../context/AuthContext'
 import { getLikedArtifacts } from '../services/artifactApi.js'
+import useTitle from '../hooks/useTitle.jsx'
 
 const LikedArtifacts = () => {
     const { user, loading: authLoading } = useContext(AuthContext)
@@ -26,9 +27,7 @@ const LikedArtifacts = () => {
         fetchLikes()
     }, [user])
 
-    useEffect(() => {
-        document.title = 'Liked Artifacts'
-    }, [])
+    useTitle('Liked Artifacts')
 
     if (authLoading || loading) {
         return (

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import AuthContext from '../context/AuthContext'
 import { getMyArtifacts, deleteArtifact } from '../services/artifactApi.js'
+import useTitle from '../hooks/useTitle.jsx'
 
 const MyArtifacts = () => {
     const { user, loading: authLoading } = useContext(AuthContext)
@@ -32,6 +33,8 @@ const MyArtifacts = () => {
         await deleteArtifact(id)
         setArtifacts(prev => prev.filter(a => a._id !== id))
     }
+
+    useTitle('My Artifacts')
 
     if (authLoading || loading) {
         return (

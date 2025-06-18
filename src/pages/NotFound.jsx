@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Link } from 'react-router'
+import useTitle from '../hooks/useTitle.jsx'
 
 const NotFound = () => {
-  useEffect(() => {
-    document.title = '404 - Not Found'
-  }, [])
+  useTitle('Not Found')
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">

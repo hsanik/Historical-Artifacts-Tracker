@@ -6,8 +6,10 @@ import bg2 from '../assets/slide2.png'
 import bg3 from '../assets/slide3.png'
 import bg4 from '../assets/slide4.png'
 import bg5 from '../assets/slide5.png'
+import useTitle from '../hooks/useTitle.jsx'
 
 const Home = () => {
+    useTitle('Home')
     const [featured, setFeatured] = useState([])
     const slides = [
         {

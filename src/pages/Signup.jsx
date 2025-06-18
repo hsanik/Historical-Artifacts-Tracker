@@ -4,6 +4,7 @@ import AuthContext from '../context/AuthContext'
 import bgForm from '../assets/bg-form.png'
 import signupImg from '../assets/signup-form.png'
 import { toast } from 'react-toastify'
+import useTitle from '../hooks/useTitle.jsx'
 
 const Signup = () => {
   const { signUp, loading } = useContext(AuthContext)
@@ -11,9 +12,7 @@ const Signup = () => {
   const location = useLocation()
   const from = location.state?.from?.pathname || '/'
 
-  useEffect(() => {
-    document.title = 'Register'
-  }, [])
+  useTitle('Sign Up')
 
   const validatePassword = (password) => {
     if (password.length < 6) {

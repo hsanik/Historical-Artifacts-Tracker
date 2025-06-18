@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { getArtifactById, updateArtifact } from '../services/artifactApi.js'
+import useTitle from '../hooks/useTitle.jsx'
 
 const UpdateArtifact = () => {
     const { id } = useParams()
@@ -37,6 +38,8 @@ const UpdateArtifact = () => {
             setSaving(false)
         }
     }
+
+    useTitle('Update Artifact')
 
     if (!artifact) return <div className="min-h-screen flex items-center justify-center"><span className="loading loading-spinner loading-lg text-emerald-400"></span></div>
 
