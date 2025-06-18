@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import AuthContext from '../context/AuthContext'
 import { getLikedArtifacts } from '../services/artifactApi.js'
 import useTitle from '../hooks/useTitle.jsx'
+import Loader from '../components/Loader.jsx'
 
 const LikedArtifacts = () => {
     const { user, loading: authLoading } = useContext(AuthContext)
@@ -32,7 +33,7 @@ const LikedArtifacts = () => {
     if (authLoading || loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <span className="loading loading-spinner loading-lg text-emerald-400"></span>
+                <Loader size={150} />
             </div>
         )
     }

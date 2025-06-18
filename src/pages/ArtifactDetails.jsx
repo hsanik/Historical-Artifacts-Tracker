@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons'
 import useTitle from '../hooks/useTitle.jsx'
+import Loader from '../components/Loader.jsx'
 
 const ArtifactDetails = () => {
     const { id } = useParams()
@@ -55,7 +56,7 @@ const ArtifactDetails = () => {
     if (authLoading || !artifact) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <span className="loading loading-spinner loading-lg text-emerald-400"></span>
+                <Loader size={150} />
             </div>
         )
     }

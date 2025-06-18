@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { getArtifactById, updateArtifact } from '../services/artifactApi.js'
 import useTitle from '../hooks/useTitle.jsx'
+import Loader from '../components/Loader.jsx'
 
 const UpdateArtifact = () => {
     const { id } = useParams()
@@ -41,7 +42,7 @@ const UpdateArtifact = () => {
 
     useTitle('Update Artifact')
 
-    if (!artifact) return <div className="min-h-screen flex items-center justify-center"><span className="loading loading-spinner loading-lg text-emerald-400"></span></div>
+    if (!artifact) return <div className="min-h-screen flex items-center justify-center"><Loader size={150}/></div>
 
     return (
         <div className="max-w-xl mx-auto px-4 py-16">
