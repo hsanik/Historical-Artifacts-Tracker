@@ -36,7 +36,7 @@ const Navbar = () => {
         </ul>
       </div>
 
-      <div className="md:flex items-center gap-3">
+      <div className="flex items-center gap-3 ml-auto">
         {/* search icon */}
         <div className="relative mr-2">
           <button onClick={()=>setShowSearch(prev=>!prev)} className="btn btn-ghost btn-square">
