@@ -1,7 +1,6 @@
 import { toast } from 'react-toastify'
 
-
-const BASE_URL = 'https://artifacts-server-side-eta.vercel.app';
+export const BASE_URL = 'https://artifacts-server-side-eta.vercel.app';
 
 const handleResponse = async (res) => {
   if (!res.ok) {
@@ -10,6 +9,8 @@ const handleResponse = async (res) => {
   }
   return res.json();
 };
+
+const credOption = { credentials: 'include' };
 
 export const getAllArtifacts = async (search='') => {
   const qs = search ? `?search=${encodeURIComponent(search)}` : '';
@@ -29,6 +30,7 @@ export const addArtifact = async (artifact) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(artifact),
+      ...credOption,
     });
     const data = await handleResponse(res);
     toast.update(toastId, { render: 'Artifact added!', type: 'success', isLoading: false, autoClose: 2000 });
@@ -46,6 +48,7 @@ export const updateArtifact = async (id, updated) => {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updated),
+      ...credOption,
     });
     await handleResponse(res);
     toast.update(toastId, { render: 'Artifact updated', type: 'success', isLoading: false, autoClose: 2000 });
@@ -58,7 +61,7 @@ export const updateArtifact = async (id, updated) => {
 export const deleteArtifact = async (id) => {
   const toastId = toast.loading('Deleting artifact…');
   try {
-    const res = await fetch(`${BASE_URL}/artifacts/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${BASE_URL}/artifacts/${id}`, { method: 'DELETE', ...credOption });
     await handleResponse(res);
     toast.update(toastId, { render: 'Deleted', type: 'success', isLoading: false, autoClose: 2000 });
   } catch (err) {
@@ -72,17 +75,18 @@ export const likeArtifact = async (id, userEmail) => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ userEmail }),
+    ...credOption,
   });
   return handleResponse(res);
 };
 
 export const getMyArtifacts = async (email) => {
-  const res = await fetch(`${BASE_URL}/artifacts/mine/${email}`);
+  const res = await fetch(`${BASE_URL}/artifacts/mine/${email}`, { ...credOption });
   return handleResponse(res);
 };
 
 export const getLikedArtifacts = async (email) => {
-  const res = await fetch(`${BASE_URL}/likes/${email}`);
+  const res = await fetch(`${BASE_URL}/likes/${email}`, { ...credOption });
   return handleResponse(res);
 };
 

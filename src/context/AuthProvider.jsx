@@ -12,6 +12,7 @@ import {
     sendPasswordResetEmail
 } from "firebase/auth";
 import { toast } from 'react-toastify';
+import { BASE_URL } from '../services/artifactApi.js';
 
 
 const AuthProvider = ({ children }) => {
@@ -23,7 +24,7 @@ const AuthProvider = ({ children }) => {
         setLoading(true);
         try {
             const result = await createUserWithEmailAndPassword(auth, email, password);
-            updateProfile(auth.currentUser, { displayName, photoURL});
+            updateProfile(auth.currentUser, { displayName, photoURL });
             setUser(auth.currentUser);
             setLoading(false);
             toast.success('Account created successfully');
@@ -81,7 +82,7 @@ const AuthProvider = ({ children }) => {
     const updateUserProfile = async (displayName, photoURL) => {
         setLoading(true);
         try {
-            const result = await updateProfile(auth.currentUser, { displayName, photoURL});
+            const result = await updateProfile(auth.currentUser, { displayName, photoURL });
             setLoading(false);
             toast.success('Profile updated successfully');
             return result;
@@ -109,12 +110,27 @@ const AuthProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             setUser(currentUser);
+            if (currentUser?.email) {
+                try {
+                    const res = await fetch(`${BASE_URL}/jwt`, {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: currentUser.email }),
+                    });
+                    await res.json();
+                }
+                catch (err) {
+                    console.error('JWT fetch failed', err);
+                }
+            }
+
             setLoading(false);
         })
         return () => unsubscribe();
-    },[])
+    }, [])
 
     const authInfo = {
         user,
