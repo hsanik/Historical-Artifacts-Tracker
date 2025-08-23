@@ -12,7 +12,7 @@ const handleResponse = async (res) => {
 
 const credOption = { credentials: 'include' };
 
-export const getAllArtifacts = async (search='') => {
+export const getAllArtifacts = async (search = '') => {
   const qs = search ? `?search=${encodeURIComponent(search)}` : '';
   const res = await fetch(`${BASE_URL}/artifacts${qs}`);
   return handleResponse(res);
