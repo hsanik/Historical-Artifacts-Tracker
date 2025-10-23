@@ -42,6 +42,29 @@ export const getArtifactById = async (id) => {
   return handleResponse(res);
 };
 
+export const getArtifactComments = async (id) => {
+  const res = await fetch(`${BASE_URL}/artifacts/${id}/comments`);
+  return handleResponse(res);
+};
+
+export const addArtifactComment = async (id, comment) => {
+  const res = await fetch(`${BASE_URL}/artifacts/${id}/comments`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(comment),
+    ...credOption,
+  });
+  return handleResponse(res);
+};
+
+export const deleteArtifactComment = async (artifactId, commentId) => {
+  const res = await fetch(`${BASE_URL}/artifacts/${artifactId}/comments/${commentId}`, {
+    method: 'DELETE',
+    ...credOption,
+  });
+  return handleResponse(res);
+};
+
 export const addArtifact = async (artifact) => {
   const toastId = toast.loading('Adding artifact…');
   try {
