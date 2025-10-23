@@ -12,9 +12,28 @@ const handleResponse = async (res) => {
 
 const credOption = { credentials: 'include' };
 
-export const getAllArtifacts = async (search = '') => {
-  const qs = search ? `?search=${encodeURIComponent(search)}` : '';
-  const res = await fetch(`${BASE_URL}/artifacts${qs}`);
+export const getAllArtifacts = async (options = {}) => {
+  const params = new URLSearchParams();
+  const {
+    search,
+    type,
+    location,
+    likesMin,
+    likesMax,
+    createdFrom,
+    createdTo,
+  } = options;
+
+  if (search) params.set('search', search);
+  if (type) params.set('type', type);
+  if (location) params.set('location', location);
+  if (likesMin !== undefined && likesMin !== null && likesMin !== '') params.set('likesMin', likesMin);
+  if (likesMax !== undefined && likesMax !== null && likesMax !== '') params.set('likesMax', likesMax);
+  if (createdFrom !== undefined && createdFrom !== null && createdFrom !== '') params.set('createdFrom', createdFrom);
+  if (createdTo !== undefined && createdTo !== null && createdTo !== '') params.set('createdTo', createdTo);
+
+  const qs = params.toString();
+  const res = await fetch(`${BASE_URL}/artifacts${qs ? `?${qs}` : ''}`);
   return handleResponse(res);
 };
 

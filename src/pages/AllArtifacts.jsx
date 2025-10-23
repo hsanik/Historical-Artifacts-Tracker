@@ -4,33 +4,89 @@ import { getAllArtifacts } from '../services/artifactApi.js'
 import useTitle from '../hooks/useTitle.jsx'
 import Loader from '../components/Loader.jsx'
 
+const parseFilters = (searchString) => {
+  const params = new URLSearchParams(searchString)
+  return {
+    search: params.get('search') || '',
+    type: params.get('type') || '',
+    location: params.get('location') || '',
+    likesMin: params.get('likesMin') || '',
+    likesMax: params.get('likesMax') || '',
+    createdFrom: params.get('createdFrom') || '',
+    createdTo: params.get('createdTo') || '',
+  }
+}
+
 const AllArtifacts = () => {
   const location = useLocation()
   const navigate = useNavigate()
-  const params = new URLSearchParams(location.search)
-  const initialQ = params.get('search') || ''
-
   const [artifacts, setArtifacts] = useState([])
   const [loading, setLoading] = useState(true)
-  const [query, setQuery] = useState(initialQ)
+  const [filters, setFilters] = useState(() => parseFilters(location.search))
+  const [formValues, setFormValues] = useState(() => parseFilters(location.search))
 
   useEffect(() => {
-    const fetchData = async (term) => {
-      const data = await getAllArtifacts(term)
-      setArtifacts(data)
-      setLoading(false)
-    }
-    fetchData(query)
-  }, [query])
+    const next = parseFilters(location.search)
+    setFormValues(next)
+    setFilters((prev) => {
+      const isSame = Object.keys(prev).every((key) => prev[key] === next[key])
+      return isSame ? prev : next
+    })
+  }, [location.search])
 
-  const handleSubmit = (e)=>{
-    e.preventDefault()
-    const trimmed = query.trim()
-    if(trimmed){
-      navigate(`/artifacts?search=${encodeURIComponent(trimmed)}`)
-    }else{
-      navigate('/artifacts')
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true)
+      try {
+        const data = await getAllArtifacts(filters)
+        setArtifacts(data)
+      } catch {
+        setArtifacts([])
+      } finally {
+        setLoading(false)
+      }
     }
+    fetchData()
+  }, [filters])
+
+  const updateFormValue = (key, value) => {
+    setFormValues((prev) => ({ ...prev, [key]: value }))
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const params = new URLSearchParams()
+    const pending = {
+      search: formValues.search.trim(),
+      type: formValues.type,
+      location: formValues.location.trim(),
+      likesMin: formValues.likesMin,
+      likesMax: formValues.likesMax,
+      createdFrom: formValues.createdFrom,
+      createdTo: formValues.createdTo,
+    }
+
+    Object.entries(pending).forEach(([key, value]) => {
+      const stringValue = typeof value === 'string' ? value.trim() : value
+      if (stringValue) params.set(key, stringValue)
+    })
+
+    const qs = params.toString()
+    navigate(`/artifacts${qs ? `?${qs}` : ''}`)
+  }
+
+  const handleReset = () => {
+    const cleared = {
+      search: '',
+      type: '',
+      location: '',
+      likesMin: '',
+      likesMax: '',
+      createdFrom: '',
+      createdTo: '',
+    }
+    setFormValues(cleared)
+    navigate('/artifacts')
   }
 
   useTitle('All Artifacts')
@@ -46,15 +102,73 @@ const AllArtifacts = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 py-16">
       <h1 className="text-3xl font-bold text-center mb-6">All Artifacts</h1>
-      <form onSubmit={handleSubmit} className="mb-6 flex justify-center gap-2">
+      <form onSubmit={handleSubmit} className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <input
           type="text"
           placeholder="Search by name..."
-          value={query}
-          onChange={e=>setQuery(e.target.value)}
-          className="input input-bordered w-full max-w-md"
+          value={formValues.search}
+          onChange={(e)=>updateFormValue('search', e.target.value)}
+          className="input input-bordered w-full"
         />
-        <button className="btn bg-emerald-400 hover:bg-emerald-500 text-white" type="submit">Go</button>
+        <select
+          className="select select-bordered w-full"
+          value={formValues.type}
+          onChange={(e)=>updateFormValue('type', e.target.value)}
+        >
+          <option value="">All Types</option>
+          <option value="Tools">Tools</option>
+          <option value="Weapons">Weapons</option>
+          <option value="Documents">Documents</option>
+          <option value="Writings">Writings</option>
+          <option value="Jewelry">Jewelry</option>
+          <option value="Pottery">Pottery</option>
+          <option value="Other">Other</option>
+        </select>
+        <input
+          type="text"
+          placeholder="Location"
+          value={formValues.location}
+          onChange={(e)=>updateFormValue('location', e.target.value)}
+          className="input input-bordered w-full"
+        />
+        <div className="flex gap-2">
+          <input
+            type="number"
+            min="0"
+            placeholder="Min Likes"
+            value={formValues.likesMin}
+            onChange={(e)=>updateFormValue('likesMin', e.target.value)}
+            className="input input-bordered w-full"
+          />
+          <input
+            type="number"
+            min="0"
+            placeholder="Max Likes"
+            value={formValues.likesMax}
+            onChange={(e)=>updateFormValue('likesMax', e.target.value)}
+            className="input input-bordered w-full"
+          />
+        </div>
+        <div className="flex gap-2">
+          <input
+            type="number"
+            placeholder="Created From (Year)"
+            value={formValues.createdFrom}
+            onChange={(e)=>updateFormValue('createdFrom', e.target.value)}
+            className="input input-bordered w-full"
+          />
+          <input
+            type="number"
+            placeholder="Created To (Year)"
+            value={formValues.createdTo}
+            onChange={(e)=>updateFormValue('createdTo', e.target.value)}
+            className="input input-bordered w-full"
+          />
+        </div>
+        <div className="flex gap-2">
+          <button className="btn bg-emerald-400 hover:bg-emerald-500 text-white" type="submit">Apply</button>
+          <button type="button" onClick={handleReset} className="btn btn-outline">Reset</button>
+        </div>
       </form>
 
       {artifacts.length === 0 ? (
