@@ -60,6 +60,7 @@ const Navbar = () => {
               </label>
               <ul tabIndex={0} className="mt-3 dropdown-content bg-white text-gray-800 rounded-lg w-52 shadow-lg border border-gray-200">
                 <li className="font-semibold text-center pointer-events-none py-2 border-b border-gray-200">{user.displayName || 'Unnamed User'}</li>
+                <li><NavLink to="/profile" className={({ isActive }) => isActive ? "block w-full text-left px-4 py-2 text-emerald-600 bg-emerald-50" : "block w-full text-left px-4 py-2 hover:bg-gray-100"}>Profile</NavLink></li>
                 <li><NavLink to="/my" className={({ isActive }) => isActive ? "block w-full text-left px-4 py-2 text-emerald-600 bg-emerald-50" : "block w-full text-left px-4 py-2 hover:bg-gray-100"}>My Artifacts</NavLink></li>
                 <li><NavLink to="/liked" className={({ isActive }) => isActive ? "block w-full text-left px-4 py-2 text-emerald-600 bg-emerald-50" : "block w-full text-left px-4 py-2 hover:bg-gray-100"}>Liked Artifacts</NavLink></li>
                 <li><button onClick={handleLogout} className="block w-full text-left px-4 py-2 cursor-pointer hover:bg-gray-100">Logout</button></li>

@@ -65,6 +65,62 @@ export const deleteArtifactComment = async (artifactId, commentId) => {
   return handleResponse(res);
 };
 
+const buildProfileUrl = (email, path = '') => {
+  const encoded = encodeURIComponent(email);
+  return `${BASE_URL}/profiles/${encoded}${path}`;
+};
+
+export const getProfile = async (email, viewerEmail) => {
+  const url = new URL(buildProfileUrl(email), window.location.origin);
+  if (viewerEmail) {
+    url.searchParams.set('viewer', viewerEmail);
+  }
+  const res = await fetch(url.toString());
+  return handleResponse(res);
+};
+
+export const updateProfile = async (email, payload) => {
+  const res = await fetch(buildProfileUrl(email), {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+    ...credOption,
+  });
+  return handleResponse(res);
+};
+
+export const getProfileSubmissions = async (email) => {
+  const res = await fetch(buildProfileUrl(email, '/submissions'));
+  return handleResponse(res);
+};
+
+export const getProfileLikes = async (email) => {
+  const res = await fetch(buildProfileUrl(email, '/likes'));
+  return handleResponse(res);
+};
+
+export const toggleFollow = async (targetEmail) => {
+  const res = await fetch(buildProfileUrl(targetEmail, '/follow'), {
+    method: 'POST',
+    ...credOption,
+  });
+  return handleResponse(res);
+};
+
+export const getFollowingList = async (email) => {
+  const res = await fetch(buildProfileUrl(email, '/following'), {
+    ...credOption,
+  });
+  return handleResponse(res);
+};
+
+export const getFollowingFeed = async (email) => {
+  const res = await fetch(buildProfileUrl(email, '/feed'), {
+    ...credOption,
+  });
+  return handleResponse(res);
+};
+
 export const addArtifact = async (artifact) => {
   const toastId = toast.loading('Adding artifact…');
   try {
