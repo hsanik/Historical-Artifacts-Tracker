@@ -4,11 +4,14 @@ React (Vite) front-end for browsing, adding, liking and managing museum artifact
 
 ## Features
 
-• Browse all artifacts, search by name
-• View details with like count
+• Browse all artifacts, search by name or filter by type/location/era
+• View artifact details with live like count, comments, and author info
 • Add / edit / delete your own artifacts (authenticated)
+• Comment on artifacts and delete your own comments
 • Like / unlike artifacts, see list of liked items
-• Firebase Auth (email / Google)
+• Personal profile page with submissions, likes, and editable display info
+• Follow other collectors to build a personalized feed of their new artifacts
+• Firebase Auth (Email/Password + Google)
 • Responsive UI with Tailwind CSS + DaisyUI
 
 ## Tech Stack
@@ -57,7 +60,28 @@ cd ../artifacts-server-side
 npm start
 ```
 
-The client automatically points to `http://localhost:3000` when `npm run dev` is used (thanks to `import.meta.env.DEV` logic). When built or served from Netlify / Firebase the client points to the Vercel URL.
+The client automatically targets `http://localhost:3000` when `npm run dev` is used (thanks to `import.meta.env.DEV` logic). In production builds it falls back to `VITE_API_BASE` or the hosted server URL defined in `/src/services/artifactApi.js`.
+
+### Available scripts
+
+| Command | Description |
+| ------- | ----------- |
+| `npm run dev` | Start Vite dev server with hot reload |
+| `npm run lint` | Run ESLint (where configured) |
+| `npm run build` | Create production build into `dist/` |
+| `npm run preview` | Locally preview the production build |
+
+### Recommended data flow while developing
+
+1. Start the backend server (`npm start` in `artifacts-server-side`).
+2. Ensure MongoDB Atlas credentials and `ADMIN_EMAILS` are configured on the server.
+3. Run `npm run dev` in this project.
+4. Sign up / log in via Firebase auth UI.
+5. Visit:
+   * `/profile` – edit your display info and see your stats.
+   * `/my` – manage submissions you authored.
+   * `/liked` – review artifacts you liked.
+   * `/artifacts/:id` – like, comment, and (if authorized) follow the author.
 
 ## Production build
 
